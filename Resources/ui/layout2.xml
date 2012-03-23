@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<layout>
+	<views>
+		<view id="main" 
+			properties="title:Welcome!;backgroundColor:red;fullscreen:true;exitOnClose:true;className:habrada;"
+			module="ui/mainWindow">
+			<children>
+				<view id="nothingSpecial" 
+					properties="top:5;backgroundColor:white;color:black;" type="Ti.UI.Label">
+					<properties>
+						<string name="text"><%= name %></string>
+					</properties>	
+				</view>
+			</children>	
+		</view>
+	</views>
+</layout>

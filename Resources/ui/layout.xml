@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<layout>
+	<abstract>
+		<views>
+			<view id="justTesting" testAttr="value1" />
+		</views>
+		<styles>
+			<!-- For testing using whitespaces to test trim... -->
+			backgroundColor :   red;
+			title :   Hallo wie gehts dir;
+			top: 34 px;
+		</styles>
+	</abstract>
+	<views>
+		<view id="main" 
+			properties="title:Welcome!;backgroundColor:red;fullscreen:true;exitOnClose:true;className:habrada;"
+			module="ui/mainWindow">
+			<children>
+				<view id="nothingSpecial" 
+					properties="top:5;backgroundColor:white;color:black;" type="Ti.UI.Label">
+					<properties>
+						<string name="text">Ficken</string>
+					</properties>	
+				</view>
+				<view ref="justTesting" />
+			</children>	
+		</view>
+		<view id="testSrc">
+			<children>
+				<view id="myRefItem" src="ui/layoutRef.xml" />
+			</children>
+		</view>
+	</views>
+</layout>
