@@ -42,8 +42,9 @@
 			
 			this._super();
 		},
-		appendChild: function(child) {
-			
+		appendInstance: function(child) {
+			var instance = this.context.getInstance();
+			// instance.add(child);
 		},
 		onBuildChildren : function() {
 			
@@ -51,9 +52,13 @@
 			if (children && children.length > 0) {
 				_.each(children, _.bind(function(child) {
 					child.build();
-					this.context.addBuild(function() {
 						
+					this.context.addBuild(function() {
+						var ptr = this.context.ptr;
+						var instance = child.context.getInstance(ptr);
+						this.appendChild(child);
 					}, this);
+				
 				}, this));
 			}
 			

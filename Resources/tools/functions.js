@@ -39,7 +39,7 @@
 		if(value) {
 			single(node).setAttribute(name, value);
 		} else {
-			return single(node).getAttribute(name);
+			return hasAttr(node, name) ? single(node).getAttribute(name) : null;
 		}
 	}, 
 	allAttr = x.allAttr = function(node, values) {
