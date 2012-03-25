@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<layout>
+	
+	<test>
+		<child>
+			<child id="3" />
+		</child>
+	</test>
+	
+</layout>

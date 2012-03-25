@@ -11,6 +11,18 @@
  			var viewInstance = this.options.viewType ? new this.options.viewType(this.options.data.properties) : null;
  			this.view = (this.options.view ? this.options.view : viewInstance);
  			if (!this.view && this.createView) this.createView(this.options.data.properties);
+ 		},
+ 		
+ 		getView: function() {
+ 			return this.view;
+ 		},
+ 		
+ 		/**
+ 		 * @instance : the ViewWrapper or an Ti.UI.View
+ 		 * @method : "add", "addTab", "addAnythingelse"
+ 		 */
+ 		add: function(instance, method) {
+ 			this.view[method || "add"]((instance.getView && instance.getView()) || instance);	
  		}
  		
  	});

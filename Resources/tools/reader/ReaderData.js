@@ -13,9 +13,9 @@
 		set: function(name, value) {
 			var previous = this.get(name);
 			
-			if (value && _.isObject(value)) value = _.extend({}, value);
+			if (value && _.isObject(value) && !_.isArray(value)) value = _.extend({}, value);
 			
-			if (previous && _.isObject(value)) {
+			if (previous && _.isObject(value) && !_.isArray(value)) {
 				value = _.extend({}, previous, value);
 			}
 			this.raw[name] = value;

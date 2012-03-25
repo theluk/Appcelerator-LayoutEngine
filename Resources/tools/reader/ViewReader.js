@@ -4,24 +4,25 @@
 
 (function() {
 	
+	/**
+	 * "Ti.UI.View" -> Ti.UI.createView
+	 */
 	var readTypeNs = function(value) {
 		var ns = value.split("."), current = this, item;
 		for(var i = 0, j = ns.length; i < j; i++) {
 			item = ns[i];
 			if(j - 1 == i) {
 				item = "create" + item;
-				// WebView -> createWebView
 			}
 			current = current[item];
 		};
 		return current
-	}
+	};
 	
 	$.ViewReader = $.Reader.extend({
 		
 		init:function() {
 			this._super();
-			
 		},
 		
 		onRead: function() {
@@ -54,14 +55,19 @@
 			});	
 			
 		},
-		
+		getChildrenReaderType: function() {
+			return $.ChildrenReader;
+		},
+		getPropertiesReaderType: function() {
+			return $.PropertiesReader;
+		},
 		getItemReaderType:function(xml){
 			switch(xml.nodeName) {
 				case "children" : 
-					return $.ChildrenReader; 
+					return this.getChildrenReaderType(); 
 					break;
 				case "properties" :
-					return $.PropertiesReader;
+					return this.getPropertiesReaderType();
 					break;
 			}
 		},

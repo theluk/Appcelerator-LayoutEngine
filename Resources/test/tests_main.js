@@ -5,6 +5,162 @@
 
 	Ti.include("../tools/layoutPropertiesMap.js");
 
+	describe("Reader", function() {
+		var reader = require("tools/layout").reader;
+		var x = require("tools/functions").xml;
+		var loader = require("tools/loader");
+		var xml = loader.read().xml;
+		
+		it("ComplexTypeReader",function() {
+			var xml = loader.read({
+				source:"ui/layoutComplexTypeReader.xml"
+			}).xml;
+			
+			var base = new reader.ComplexTypeReader({
+				xml: x(xml).getAll("test").single().value()
+			});
+			
+			base.read();
+			
+			var child = base.context.data.get("ChildrenItemReaders")[0];
+			expect(child.context.data.get("nodeName")).toEqual("child");
+			
+			var innerChild = child.context.data.get("ChildrenItemReaders")[0];
+			expect(innerChild.context.data.get("nodeName")).toEqual("child");
+			
+			base.build();
+			
+			expect(child._creationStage).toEqual(reader.ReaderBase.Stages);
+			expect(innerChild._creationStage).toEqual(reader.ReaderBase.Stages);
+			
+			
+		});
+		
+		it("Merger", function() {
+			
+			var data = new reader.ReaderData({
+				raw: {
+					id : "test",
+					value : "test1",
+					props : {
+						value1:"value",
+						value2:"value"
+					}
+				}
+			});
+			
+			var base = new reader.Merger({
+				xml: x(xml).getAll("view").get("#main").destroy(),
+				data: data
+			});
+			
+			var data2 = new reader.ReaderData({
+				raw: {
+					value:"test2",
+					custom:"test4"
+				}
+			});
+			
+			base.merge(data2);
+			
+			expect(base.context.data.raw).toEqual({
+				id : "test",
+				value : "test1",
+				props : {
+					value1:"value",
+					value2:"value"
+				},
+				custom:"test4"
+			});
+			
+		});
+		
+		it("ReaderBase Data", function() {
+			
+			var data = new reader.ReaderData({
+				raw: {
+					id : "test",
+					value : "test1",
+					props : {
+						value1:"value",
+						value2:"value"
+					}
+				}
+			});
+			
+			var base = new reader.ReaderBase({
+				xml: x(xml).getAll("view").get("#main").destroy(),
+				data: data
+			});
+			
+			expect(base.context.data).toBe(data);
+			
+			base.destroy();
+			
+			data = {test:"test"};
+			
+			base = new reader.ReaderBase({
+				xml: x(xml).getAll("view").get("#main").destroy(),
+				data: data
+			});
+			
+			expect(base.context.data instanceof reader.ReaderData).toBeTruthy();
+			expect(base.context.data.get("test")).toEqual("test");
+			
+		});
+		
+		it("ReaderBase", function() {
+			
+			var base = new reader.ReaderBase({
+				xml: x(xml).getAll("view").get("#main").destroy()
+			});
+			
+			base.execute();
+			
+			expect(base._creationStage.length).toEqual(11);
+			expect(base.xml).toBeDefined();
+			expect(base.context).toBeDefined();
+			expect(base.context.data.get("nodeName")).toEqual("view");
+			expect(base.context.reader).toBe(base);
+			
+			expect(reader.Context.get(base.context.id)).toBeDefined(base.context);
+			
+			base.destroy();
+			
+			
+			
+		});
+		
+		it("ReaderData", function() {
+			var data = new reader.ReaderData({
+				raw: {
+					id : "test",
+					value : "test1",
+					props : {
+						value1:"value",
+						value2:"value"
+					}
+				}
+			});
+			
+			expect(data.get("id")).toEqual("test");
+			data.set("id", "newtest");
+			expect(data.get("id")).toEqual("newtest");
+			
+			data.set("props", {
+				value2:"newValue",
+				value3:"newValue"
+			});
+			expect(data.get("props")).toEqual({
+				value1:"value",
+				value2:"newValue",
+				value3:"newValue"
+			});
+				
+		});
+				
+	});
+
 	describe("XmlFunctions", function() {
 		
 		var x = require("tools/functions").xml;

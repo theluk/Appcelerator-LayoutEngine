@@ -18,7 +18,7 @@
 		},
 		
 		getItemReaderType: function() {
-			return $.ViewReader;
+			return UI.ViewReader;
 		},
 		
 		getItemReaderOptions: function() {

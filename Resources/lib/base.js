@@ -28,12 +28,12 @@
 			// Check if we're overwriting an existing function
 			prototype[name] = typeof prop[name] == "function" && typeof _super[name] == "function" && fnTest.test(prop[name]) ? (function(name, fn) {
 				return function() {
-					var tmp = this._super, self = this;
+					var tmp = this._super, self = this, args = arguments;
 
 					// Add a new ._super() method that is the same method
 					// but on the super-class
 					this._super = function() {
-						return _super[name].apply(self, arguments);
+						return _super[name] && _super[name].apply(self, args);
 					}
 					// The method only need to be bound temporarily, so we
 					// remove it when we're done executing

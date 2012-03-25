@@ -22,11 +22,6 @@
 		
 	});
 	
-	var isViewElement = function(xml) {
-		if ($.ViewReader) return $.ViewReader.canRead(xml);
-		return xml.nodeName == "view";
-	}
-	
 	$.PropertyItemReader = $.Reader.extend({
 		
 		init:function(options) {
@@ -42,7 +37,7 @@
 				
 				if ((view = this.x.children("view").get().value())) {
 					
-					var reader = new $.ViewReader({
+					var reader = new UI.ViewReader({
 						context: this.containerElement.context.createChild(),
 						xml: view
 					});
