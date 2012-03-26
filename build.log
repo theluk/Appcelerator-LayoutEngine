@@ -6,11 +6,11 @@ Logfile initialized
 [DEBUG] Waiting for device to be ready ...
 [TRACE] adb devices returned 1 devices/emulators
 [DEBUG] Device connected... (waited 0 seconds)
-[DEBUG] waited 0.016000 seconds on emulator to get ready
+[DEBUG] waited 0.015000 seconds on emulator to get ready
 [DEBUG] com.layoutEngine installed? True
 [INFO] Fastdev server running, deploying in Fastdev mode
 [INFO] Copying project resources..
-[TRACE] COPYING MODIFIED FILE: C:\Users\theluk\GIT\appcelerator\LayoutEngine\Resources\tools\reader\ComplexTypeReader.js => C:\Users\theluk\GIT\appcelerator\LayoutEngine\build\android\bin\assets\Resources\tools\reader\ComplexTypeReader.js
+[TRACE] COPYING MODIFIED FILE: C:\Users\theluk\GIT\appcelerator\LayoutEngine\Resources\tools\reader\Context.js => C:\Users\theluk\GIT\appcelerator\LayoutEngine\build\android\bin\assets\Resources\tools\reader\Context.js
 [INFO] Tiapp.xml unchanged, skipping class generation
 [DEBUG] Processing Android resource drawables
 [DEBUG] found drawable-long-land-hdpi splash screen at C:\Users\theluk\GIT\appcelerator\LayoutEngine\Resources\android\images\res-long-land-hdpi\default.png
@@ -28,3 +28,5 @@ Logfile initialized
 [INFO] Launching application ... LayoutEngine
 [TRACE] Launch output: Starting: Intent { act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] cmp=com.layoutEngine/.LayoutengineActivity }
 
+[TRACE] Launch output: 
+[TRACE] Launch output: 

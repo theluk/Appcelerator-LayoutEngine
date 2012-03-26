@@ -15,7 +15,7 @@
 		
 		getItemReader: function(xml) {
 			if (!xml || xml.nodeName == "#text") return null;
-			var ctor = this.getItemReaderType() || $.Reader;
+			var ctor = this.getItemReaderType(xml) || $.Reader;
 			return new ctor(this.getItemReaderOptions(xml));
 		},
 		getItemReaderOptions : function(xml) {
@@ -31,13 +31,19 @@
 			this._itemReaderType = value;
 		},
 		onChildren: function() {
+			
+			this._super();
+			
 			var children = [];
 			
 			this.x.children().each(_.bind(function(el) {
+				Ti.API.info("ComplexTypeReader: Trying Read Child " + el.nodeName);
 				var reader = this.getItemReader(el);
 				if (reader) {
+					Ti.API.info("Child Element Read : " + el.nodeName);
 					children.push(reader);
 					reader.read();
+					Ti.API.info("Child Element Finish Read");
 				}
 			}, this));
 			this.context.data.set("ChildrenItemReaders", children);
@@ -48,6 +54,8 @@
 			// instance.add(child);
 		},
 		onBuildChildren : function() {
+			
+			
 			var children = this.context.data.get("ChildrenItemReaders");
 			if (children && children.length > 0) {
 				_.each(children, _.bind(function(child) {
@@ -61,6 +69,7 @@
 				
 				}, this));
 			}
+			this._super();
 			
 		}
 		

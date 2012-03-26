@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<layout>
+	<abstract>
+		<properties id="propRef">
+			<backgroundColor>red</backgroundColor>
+			<top>10</top>
+		</properties>
+		<view id="refView" properties="backgroundColor:white;" />
+	</abstract>
+	<views>
+		<view id="test" type="Ti.UI.View" properties="backgroundColor:red;top:10;">
+			<properties>
+				<bottom>20</bottom>
+			</properties>
+		</view>
+		<view id="test2">
+			<properties ref="propRef">
+				<bottom>20</bottom>
+			</properties>
+		</view>
+		<view id="test3" ref="refView" properties="top:1;" />
+	</views>
+</layout>

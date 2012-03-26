@@ -7,14 +7,24 @@
 	$.PropertiesReader = $.Reader.extend({
 		
 		init: function(options) {
-			this._super();
+			this._super(options);
 			this.containerElement = options.container;
+			Ti.API.info("Initialized PropertiesReader");
+			
 		},
-		getItemReaderOptions: function() {
+		getItemReaderOptions: function(xml) {
 			return {
 				context:this.context.createChild(),
-				container : this.containerElement
+				container : this,
+				xml: xml
 			};
+		},
+		merge: function(other) {
+			this.context.data.set("properties", other.get("properties"));
+		},
+		afterRead:function() {
+			this._super();
+			if (this.containerElement) this.containerElement.context.data.set("properties", this.context.data.get("properties"));
 		},
 		getItemReaderType : function() {
 			return $.PropertyItemReader;
@@ -38,7 +48,7 @@
 				if ((view = this.x.children("view").get().value())) {
 					
 					var reader = new UI.ViewReader({
-						context: this.containerElement.context.createChild(),
+						context: c.context.createChild(),
 						xml: view
 					});
 					reader.read();
@@ -46,8 +56,8 @@
 					
 				} else {
 					var o = {};
-					o[nodeName] = this.x.mapStyle(nodeName);
-					this.containerElement.context.data.set("properties", o);	
+					o[nodeName] = this.x.mapStyle(nodeName).value();
+					c.context.data.set("properties", o);	
 				}
 			}
 		},

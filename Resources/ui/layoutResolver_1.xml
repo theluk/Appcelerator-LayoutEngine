@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<layout>
+	<abstract>
+		<view id="hallo" ref="test" attr="1" src="ui/layoutResolver_2.xml">hallo</view>
+	</abstract>
+	<views>
+		<view ref="hallo"></view>
+	</views>
+</layout>

@@ -17,7 +17,7 @@
 				return false;
 		}
 		if(properties.maxHeight || properties.maxWidth) {
-			var maxHeight = properties.maxHeight || 0, maxWidth = properties.maxWidth || 0;
+			var maxHeight = properties.maxHeight || 9999, maxWidth = properties.maxWidth || 9999;
 			if(data.height > parseInt(maxHeight) || data.width > parseInt(maxWidth))
 				return false;
 		}
@@ -32,7 +32,7 @@
 			
 			var dependencySettings = this.x.attr("needs").parseInlineProperties().value();
 			this.context.data.set("dependency", dependencySettings);
-
+			
 		},
 		afterRead : function() {
 

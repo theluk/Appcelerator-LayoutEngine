@@ -20,11 +20,7 @@
 	};
 	
 	$.ViewReader = $.Reader.extend({
-		
-		init:function() {
-			this._super();
-		},
-		
+				
 		onRead: function() {
 			
 			var o = this.x.allAttr("type module id").value();
@@ -34,10 +30,12 @@
 			if (o.module) d.set("Module", require(o.module));
 			
 			d.set("id", o.id);
-			d.set("properties", x.attr("properties").parseInlineProperties().value());
+			d.set("properties", this.x.attr("properties").parseInlineProperties().value());
 			
 		},
-		
+		getDeepMergeProperties: function() {
+			return ["properties", "children"];
+		},
 		onBuild : function() {
 			var d = this.context.data;
 			this.context.addBuild(function() {
@@ -72,10 +70,11 @@
 			}
 		},
 		
-		getItemReaderOptions: function() {
+		getItemReaderOptions: function(xml) {
 			return {
 				context : this.context.createChild(),
-				container: this
+				container: this,
+				xml:xml
 			};
 		}
 		

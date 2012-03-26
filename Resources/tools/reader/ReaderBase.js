@@ -14,6 +14,9 @@
 			_.each(def.importOptions, function(value) {
 				self[value] = options[value];
 			});
+			
+			if (!this.xml) throw "ReaderBase: XML was not specified!";
+			
 			this.options = options;
 
 			if(!this.context.reader)
@@ -82,6 +85,10 @@
 	});
 	
 	$.ReaderBase.Stages = ["beforeRead", "onRead", "beforeChildren", "onChildren", "afterChildren", "afterRead", "checkValid", "beforeBuild", "onBuild", "onBuildChildren", "afterBuild"];
-
+	
+	_.each($.ReaderBase.Stages, function(fnName) {
+		if (fnName == "beforeRead") return;
+		$.ReaderBase.prototype[fnName] = function() {};
+	});
 
 })();

@@ -53,26 +53,33 @@
 			if(!this.__buildchain)
 				(this.__buildchain = this.__root.__buildchain = $.Context.createBuildChain(this));
 			this.__buildchain.add.call(this, fn, instance);
+			Ti.API.info("Adding Build : " + fn.toString());
 		},
 		onBeforeChainRun : function(ptr) {
-
+			instances[ptr] = {};
 		},
 		onAfterChainRun : function(ptr) {
 			this.__hasBuild = true;
 		},
+		writeOutput: function() {
+			this.__buildchain.output();
+		},
 		createInstance : function(rebuild) {
 			var id = _.uniqueId("_build_instance_");
+			if(!this.__root)
+				this.__root = this.root();
 			if(!this.__buildchain)
-				this.__buildchain = $.Context.createBuildChain(this);
-
+				(this.__buildchain = this.__root.__buildchain = $.Context.createBuildChain(this));
+			
 			// Executes the Building-LifeCycle, letting controls set up a build
 			if(this.reader && (!this.__hasBuild || rebuild == true))
 				this.reader.execute();
 
 			// Runs the BuildChain which results in createing the UI instances etc.
+			Ti.API.info("Begin running BuildChain");
 			this.__buildchain.execute(id);
-
-			return this.getInstance(id);
+			Ti.API.info("End running BuildChain");
+			return id;
 
 		},
 		getInstance : function(ptr) {
@@ -131,6 +138,12 @@
 					context.getInstance = tGetter;
 					context.ptr = tPtr;
 				});
+			},
+			output: function() {
+				Ti.API.info("Outputting Build Chain...");
+				for(var i=0;i <data.length;i++) {
+					Ti.API.info(data[i].toString());
+				}
 			},
 			execute : executor,
 			destroy : function() {

@@ -11,6 +11,155 @@
 		var loader = require("tools/loader");
 		var xml = loader.read().xml;
 		
+		it("Build Chain", function() {
+			
+			var xml = loader.read({
+				source: "ui/layoutViewReader.xml"
+			}).xml;
+			
+			var base = new reader.ViewReader({
+				xml : x(xml).getAll("view").get("#test").value()
+			});
+			
+			var iId = base.context.createInstance();
+			var instance = base.context.getInstance(iId);
+			
+			expect(instance instanceof Ti.UI.View).toBeTruthy();
+			
+		});
+		
+		it("ViewReader", function() {
+			
+			var xml = loader.read({
+				source: "ui/layoutViewReader.xml"
+			}).xml;
+			
+			var base = new reader.ViewReader({
+				xml : x(xml).getAll("view").get("#test").value()
+			});
+			
+			base.read();
+			
+			expect(base.context.data.get("Type")).toBeDefined();
+			expect(base.context.data.get("properties")).toEqual({
+				backgroundColor:"red",
+				top:10,
+				bottom:20
+			});
+			
+			base = new reader.ViewReader({
+				xml: x(xml).getAll("view").get("#test2").value()
+			});
+			base.read();
+			
+			expect(base.context.data.get("properties")).toEqual({
+				backgroundColor:"red",
+				top:10,
+				bottom:20
+			});
+			
+			base = new reader.ViewReader({
+				xml: x(xml).getAll("view").get("#test3").value()
+			});
+			base.read();
+			expect(base.context.data.get("properties")).toEqual({
+				backgroundColor:"white",
+				top:1
+			});
+			
+			base.build();
+			
+		});
+		
+		it("Dependency Resolver 2", function() {
+			
+			var xml = loader.read({
+				source : "ui/layoutDependency.xml"
+			}).xml;
+			
+			var Base = reader.PlattformDependencyReader.extend({
+				onRead: function() {
+					if (this.x.hasAttr("test").value()) {
+						this.context.data.set("test", this.x.attr("test").value());
+					}
+				}
+			});
+			
+			var base = new Base({
+				xml: x(xml).getAll("view").get("#test7").value()
+			});	
+			
+			base.read();
+			
+			expect(base.context.data.get("test")).toEqual("valid");
+			
+		});
+		
+		it("Dependency Resolver", function() {
+			
+			var xml = loader.read({
+				source : "ui/layoutDependency.xml"
+			}).xml;
+			
+			var base;
+			var fnGetReader = function(id) {
+				base = new reader.PlattformDependencyReader({
+					xml: x(xml).getAll("view").get("#" + id).value()
+				});	
+			};
+			fnGetReader("test");
+			base.read();
+			expect(base._valid).toBeTruthy();
+			
+			fnGetReader("test2");
+			base.read();
+			expect(base._valid).toBeFalsy();
+			
+			fnGetReader("test3");
+			base.read();
+			expect(base._valid).toBeTruthy();
+			
+			fnGetReader("test4");
+			base.read();
+			expect(base._valid).toBeFalsy();
+			
+			fnGetReader("test5");
+			base.read();
+			expect(base._valid).toBeTruthy();
+			
+			fnGetReader("test6");
+			base.read();
+			expect(base._valid).toBeFalsy();
+			
+			
+		});
+		
+		it("Resolver", function() {
+			
+			var xml = loader.read({
+				source:"ui/layoutResolver_1.xml"
+			}).xml;
+			
+			var Base = reader.ResolveReader.extend({
+				onRead: function() {
+					if(this.x.hasAttr("attr").value()) { 
+						this.context.data.set("attr1", parseInt(this.x.attr("attr").value()));
+					}
+					if(this.x.hasAttr("properties").value()) {
+						this.context.data.set("properties", this.x.attr("properties").value());
+					}
+				}
+			});
+			
+			var base = new Base({
+				xml: x(xml).section("views view").single().destroy()
+			});
+			base.read();
+			expect(base.context.data.get("attr1")).toEqual(1);
+			expect(base.context.data.get("properties")).toEqual("blablabla");
+			
+		});
+		
 		it("ComplexTypeReader",function() {
 			var xml = loader.read({
 				source:"ui/layoutComplexTypeReader.xml"
@@ -249,13 +398,12 @@
 			expect(attrValue).toEqual("myAttrSrc");
 			
 			var xBase = x(xml.documentElement).getAll("view").get("#main").destroy();
-			expect(xBase).toBe(x(xBase).resolveSrc().destroy());
-			
+			expect(xBase).toBe(x(xBase).resolveSrc().single().destroy());			
 		});
 			
 		it("Function: resolveRef", function() {
 			var xBase = x(xml.documentElement).getAll("view").get("#main").destroy();
-			expect(xBase).toBe(x(xBase).resolveRef().destroy());
+			expect(xBase).toBe(x(xBase).resolveRef().single().destroy());
 			
 			var xEl = x(xml.documentElement)
 							.getAll("view")
@@ -266,7 +414,7 @@
 							
 			var resolved = xEl.resolveRef();
 			
-			expect(resolved.attr("id").value()).toEqual("justTesting");
+			expect(resolved.single().attr("id").value()).toEqual("justTesting");
 			
 			resolved = null;
 			xEl.destroy();

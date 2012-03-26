@@ -33,7 +33,7 @@
 					// Add a new ._super() method that is the same method
 					// but on the super-class
 					this._super = function() {
-						return _super[name] && _super[name].apply(self, args);
+						return _super[name] && _super[name].apply(self, (arguments.length > 0 ? arguments : args));
 					}
 					// The method only need to be bound temporarily, so we
 					// remove it when we're done executing

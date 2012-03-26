@@ -1,4 +1,7 @@
 (function() {
+	
+	Ti.include("/tools/layoutPropertiesMap.js");
+	
 	var _ = require("lib/underscore");
 	
 	var options = {
@@ -7,7 +10,6 @@
 		},
 		loader : require("tools/loader"),
 		getMap : function() {
-			Ti.include("/tools/layoutPropertiesMap.js");
 			return map;
 		}
 	};
@@ -121,24 +123,27 @@
 	},
 	resolveSrc = x.resolveSrc = function(node, id) {
 		node = single(node);
-		if (!hasSrc(node)) return node;
+		if (!hasSrc(node)) return [node];
 		var path = x.attr(node, "src");
 		if (!options.loader) throw("XML Loader needed...");
 		var xml = options.loader.read({source:path}).xml;
+		var elements = null;	
 		var all = getAll(xml.documentElement, node.nodeName);
-		return all;
-		//var result = get(all, (id ? ("#" + id) : "#main"));
-		//return result || get(all);
+		if (id) {
+			elements = x.filter(all, function(el) { return el && el.nodeName != "#text" && x.attr(el, "id") == id; });
+		} else {
+			elements = all;
+		}
+		return elements.length > 0 ? elements : [node];
 	}
 	resolveRef = x.resolveRef = function(node) {
 		node = single(node);
-		if (!hasRef(node) || !docElement(node) || node.nodeName == "#text") return node;
-		
+		if (!hasRef(node) || !docElement(node) || node.nodeName == "#text") return [node];
 		var id = x.attr(node, "ref"),
 			nodeName = node.nodeName,
-			element = get(getDocAll(node, nodeName), "#" + id);
+			elements = x.filter(getDocAll(node, nodeName), function(el) { return el && el.nodeName != "#text" && x.attr(el, "id") == id; });
 		
-	 	return element;
+	 	return elements.length > 0 ? elements : [node];
 	},
 	text = x.text = function(text) {
 		//1.normalize text if empty

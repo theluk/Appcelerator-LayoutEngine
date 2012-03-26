@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<layout>
+	<views>
+		<view id="test" needs="plattform:android;" />
+		<view id="test2" needs="plattform:iphone;" />
+		<view id="test3" needs="minHeight:480;" />
+		<view id="test4" needs="minHeight:500;" /> <!-- not valid -->
+		<view id="test5" needs="plattform:android;minHeight:320;maxHeight:480;" />
+		<view id="test6" needs="minHeight:320;maxHeight:400;" />
+		
+		<view id="test7" src="ui/layoutDependency2.xml"></view>
+		
+	</views>
+</layout>

@@ -9,30 +9,52 @@
 		init : function() {
 			this._super();
 			this._resolved = null;
+			this._resolvedReaders = null;
+		},
+		beforeRead: function() {
+			this._super();
+			this._resolvedReaders = [];
+		},
+		getResolvedItemReader: function(xml) {
+			return this.constructor;
 		},
 		afterRead : function() {
 			
 			this._super();
-
+			
 			var data = this.context.data;
 			var res = this.resolve();
 			
 			if(res.any) {
-				var Reader = (this.context.createReader() || this.constructor);
-				var resolvedData = null;
-				var reader = new Reader({
-					xml : res.result,
-					context : this.context.createChild({
-						proxy : true
-					})
-				}).read();
-
-				this.merge(data, reader.context.data);
+				_.each(res.result, _.bind(function(current) {
+					Ti.API.info(current + " " + (current && current.nodeName));
+					
+					var Reader = this.getResolvedItemReader(current);
+					var resolvedData = null;
+					var reader = new Reader({
+						xml : current, 
+						context : this.context.createChild({
+							proxy : true
+						})
+					});
+					
+					reader.read();
+					this._resolvedReaders.push(reader);
+				
+				}, this));
+				
+				var result = this.validateManyGetSingle(this._resolvedReaders);
+				this.merge(result.context.data);
+				
 			}
 
 		},
+		validateManyGetSingle: function(readers) {
+			var results = _(readers).chain().filter(function(r) { return r._valid == true; }).first().value();
+			return results;
+		},
 		resolve : function(update) {
-			var empty = null, results;
+			var empty = null, results, isResolved = false;
 
 			if(this._resolved && !(update == true))
 				return this._resolved;
@@ -41,18 +63,22 @@
 				any : false,
 				many : false,
 				result : null
-			}, result = null, shouldResolve = (this.x.hasRef() || this.x.hasSrc());
-
-			if(!shouldResolve || 
-				(( result = x.resolveRef(current)) === current) || 
-					(( result = x.resolveSrc(current)) === current))
-						return (this._resolved = defaults);
-
-			return (this._resolved = {
+			}, result = null;
+			
+			
+			if (this.x.hasRef().value() && !(x.single( result = x.resolveRef(this.xml)) === this.xml)) {
+				isResolved = true;
+			}
+			
+			if (this.x.hasSrcRef().value() && !(x.single( result = x.resolveSrc(this.xml, this.x.attr("ref").value())) === this.xml)){ 
+				isResolved = true;
+			}
+			
+			return isResolved ? (this._resolved = {
 				any : true,
 				many : x.norm(result).length > 1,
-				result : result
-			});
+				result : x.norm(result)
+			}) : (this._resolved = defaults);
 
 		}
 	});
