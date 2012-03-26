@@ -49,32 +49,38 @@
 			return c;
 		},
 		addBuild : function(fn, instance) {
-			if(!this.__root)
-				this.__root = this.root();
-			if(!this.__buildchain && !(this.__buildchain = this.__root.__buildchain))
-				(this.__buildchain = this.__root.__buildchain = $.Context.createBuildChain(this));
+			this.prepareBuild();
 			this.__buildchain.add.call(this, fn, (instance || this.reader));
 		},
 		onBeforeChainRun : function(ptr) {
 			instances[ptr] = {};
 		},
 		onAfterChainRun : function(ptr) {
-			this.__hasBuild = true;
+			//this.__hasBuild = true;
 		},
 		writeOutput: function() {
 			this.__buildchain.output();
 		},
-		createInstance : function(rebuild) {
-			var id = _.uniqueId("_build_instance_");
+		prepareBuild : function() {
 			if(!this.__root)
 				this.__root = this.root();
 			if(!this.__buildchain && !(this.__buildchain = this.__root.__buildchain))
 				(this.__buildchain = this.__root.__buildchain = $.Context.createBuildChain(this));
+		},
+		makeBuild : function(rebuild) {
+			this.prepareBuild();
+			if (this.reader && (!this.__hasBuild || rebuild == true)) {
+				this.reader.execute();
+				this.__hasBuild = true;
+			}
+		},
+		createInstance : function(rebuild) {
+			var id = _.uniqueId("_build_instance_");
+			this.prepareBuild();
 			
 			// Executes the Building-LifeCycle, letting controls set up a build
-			if(this.reader && (!this.__hasBuild || rebuild == true))
-				this.reader.execute();
-
+			this.makeBuild();
+			
 			// Runs the BuildChain which results in createing the UI instances etc.
 			this.__buildchain.execute(id);
 			return id;
@@ -117,6 +123,7 @@
 			while ((current = _data.shift())) {
 				current(ptr);
 			}
+			Ti.API.info("--- BuildChain Executor executed " + data.length + " build functions");
 			context.onAfterChainRun();
 		};
 		return {

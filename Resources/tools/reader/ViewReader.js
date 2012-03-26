@@ -41,15 +41,15 @@
 		onBuild : function() {
 			var d = this.context.data;
 			var self = this;
+			var attributes = {
+				context:this.context
+			};
+			if (d.get("Type")) {
+				attributes.viewType = d.get("Type");
+			}
+			
+			var InstanceType = (d.get("Module") || UI.ViewWrapper);
 			this.context.addBuild(function() {
-				var attributes = {
-					context:this.context
-				};
-				if (d.get("Type")) {
-					attributes.viewType = d.get("Type");
-				}
-				
-				var InstanceType = (d.get("Module") || UI.ViewWrapper);
 				var instance = new InstanceType(attributes);
 				this.context.setInstance(instance);
 			});	

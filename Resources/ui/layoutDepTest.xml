@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<layout>
+	<abstract>
+		<view id="list" type="Ti.UI.TableView">
+			<children appendMethod="appendRow">
+				<view type="Ti.UI.TableViewRow" properties="title:This is Row 1;" />
+				<view type="Ti.UI.TableViewRow" properties="title:This is Row 2;" />
+				<view type="Ti.UI.TableViewRow" properties="title:This is Row 3;" />
+				<view type="Ti.UI.TableViewRow" properties="title:This is Row 4;" />
+			</children>
+		</view>
+		<view id="detail" type="Ti.UI.View">
+			<children>
+				<view type="Ti.UI.Label" properties="text:Hi Im just sitting here for now...;" />
+			</children>
+		</view>
+	</abstract>
+	<views>
+		<view id="main" type="Ti.UI.Window" properties="backgroundColor:white;exitOnClose:true;">
+			<children>
+				<view needs="minHeight:900;" properties="top:0;right:0;left:0;bottom:0;" type="Ti.UI.View">
+					<children>
+						<view ref="list" properties="left:0;top:0;bottom:0;width:200dp;" />
+						<view ref="detail" properties="left:200dp;top:0;bottom:0;right:0;" />
+					</children>
+				</view>
+				<view needs="maxHeight:480;" properties="top:0;right:0;left:0;bottom:0;" type="Ti.UI.View">
+					<children>
+						<view ref="list" />
+					</children>
+				</view>
+			</children>
+		</view>
+	</views>
+</layout>

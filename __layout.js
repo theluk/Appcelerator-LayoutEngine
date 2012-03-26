@@ -42,7 +42,6 @@ _.extend(Layout.prototype, {
 		if(this.options.asTemplate && (this.options.source || this.options.content) && this.options.data) {(this.options.source && ( openPath = this.options.source)); (this.options.content && ( contentValue = this.options.content));
 			template = true;
 		}
-		Ti.API.info("OpenPath: " + openPath);
 		if(openPath) {
 			var file = Ti.Filesystem.getFile(Ti.Filesystem.resourcesDirectory, openPath), blob = file.read();
 			contentValue = blob.text;
@@ -116,16 +115,13 @@ _.extend(Layout.prototype, {
 		var module = this._readAttribute(viewObject.view, "module"), type = this._readAttribute(viewObject.view, "type"), returnValue = null;
 
 		if(module) {
-			Ti.API.info("Creating CTOR for module: " + module);
 			returnValue = viewObject.ctor = this._bindModule(module);
 		} else if(type) {
-			Ti.API.info("Creating CTOR for type: " + type);
 			returnValue = viewObject.ctor = this._bindViewCreateFunction(type);
 		} else {
 			if(this.clr && this.callerCustomCtor && viewObject.isRootElement) {
 				returnValue = viewObject.ctor = this.callerCustomCtor;
 			} else {
-				Ti.API.info("Creating CTOR DEFAULT (view)");
 				returnValue = viewObject.ctor = this._bindViewCreateFunction("Ti.UI.View");
 			}
 
@@ -163,7 +159,6 @@ _.extend(Layout.prototype, {
 	appendChildren : function(children, instance, appendMethod) {
 		var me = this;
 		_(children).each(function(child) {
-			Ti.API.info("Appending Child..." + appendMethod);
 			(instance.win || instance.view || instance)[appendMethod](child);
 		});
 	},

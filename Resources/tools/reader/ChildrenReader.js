@@ -33,12 +33,10 @@
 			this._super();
 			
 			var children = this.context.data.get("ChildrenItemReaders");
-			if(children) Ti.API.info("ComplexType onChildren " + this.context.id + " " + this.context.data.get("nodeName") + " "  + children.length);
 		},
 		onBuildChildren: function() {
 			var children = this.context.data.get("ChildrenItemReaders");
 			
-			if(children) Ti.API.info("ComplexType onBuildChildren " + this.context.id + " " + this.context.data.get("nodeName") + " "  + children.length);
 			this._super();
 		},
 		appendInstance: function(instance) {
@@ -47,7 +45,6 @@
 				i = this.containerElement.context.parent.getInstance(this.context.ptr);
 			}
 			// i is a viewwrapper, viewwrapper should implement add(instance, addMethod)
-			Ti.API.info("--- Children AppendInstance Method: " + this.context.data.get("appendMethod"));
 			i.add(instance.context.getInstance(this.context.ptr), this.context.data.get("appendMethod"));
 		}
 		

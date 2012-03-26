@@ -46,11 +46,6 @@
 			}, this));
 			if (children.length > 0) this.context.data.set("ChildrenItemReaders", children);
 		},
-		appendInstance: function(childReader) {
-			// Is in build-life-cycle , should be called only through build-life-cycle
-			var instance = this.context.getInstance();
-			// instance.add(child);
-		},
 		onBuildChildren : function() {
 			var children = this.context.data.get("ChildrenItemReaders");
 			
@@ -59,7 +54,7 @@
 
 					child.build();
 					if (!child._valid) return;
-					this.context.addBuild(function() {
+					if (this.appendInstance) this.context.addBuild(function() {
 						this.appendInstance(child, this.context.ptr);
 					}, this);
 				

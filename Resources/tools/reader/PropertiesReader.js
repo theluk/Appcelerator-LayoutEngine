@@ -9,7 +9,6 @@
 		init: function(options) {
 			this._super(options);
 			this.containerElement = options.container;
-			Ti.API.info("Initialized PropertiesReader");
 			
 		},
 		getItemReaderOptions: function(xml) {
@@ -25,18 +24,9 @@
 		afterRead:function() {
 			this._super();
 			var props = this.context.data.get("properties");
-			for(name in props) {
-				Ti.API.info("propertyReader Source: " + name + " " + props[name]);
-			}
-			if (this.containerElement) {
+				if (this.containerElement) {
 				props = this.containerElement.context.data.get("properties");
-				for(name in props) {
-					Ti.API.info("propertyReader Before Target: " + name + " " + props[name]);
-				}
-				this.containerElement.context.data.set("properties", this.context.data.get("properties"));
-				for(name in props) {
-					Ti.API.info("propertyReader Target: " + name + " " + props[name]);
-				}
+					this.containerElement.context.data.set("properties", this.context.data.get("properties"));
 			}
 		},
 		getItemReaderType : function() {
@@ -88,10 +78,6 @@
 					
 					var setter = "set" + item.propertyName.slice(0, 1).toUpperCase() + item.propertyName.slice(1);
 					this.containerElement.containerElement.context.getInstance(this.context.ptr).view[setter](instance.getView());
-					
-					//Ti.API.info("Setting PropertyName " + item.propertyName + " to " + instance.view);
-					//this.containerElement.context.data.set("properties", o);
-					//Ti.API.info("-- hasNewValue = " + this.containerElement.context.data.get("properties").window);
 				}, this);
 			}
 			

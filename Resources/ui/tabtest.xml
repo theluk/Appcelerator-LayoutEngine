@@ -6,7 +6,7 @@
 				<children>
 					<view type="Ti.UI.Label">
 						<properties>
-							<text ref="refText" />
+							<text>Hallo das ist ein TEst</text>
 						</properties>
 					</view>
 				</children>
