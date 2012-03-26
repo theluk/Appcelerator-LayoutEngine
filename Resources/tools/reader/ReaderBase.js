@@ -84,7 +84,7 @@
 		}
 	});
 	
-	$.ReaderBase.Stages = ["beforeRead", "onRead", "beforeChildren", "onChildren", "afterChildren", "afterRead", "checkValid", "beforeBuild", "onBuild", "onBuildChildren", "afterBuild"];
+	$.ReaderBase.Stages = ["beforeRead", "onRead", "beforeChildren", "onChildren", "afterChildren", "afterRead", "checkValid", "beforeBuild", "beforeParentBuild", "onBuild", "onBuildChildren", "afterBuild"];
 	
 	_.each($.ReaderBase.Stages, function(fnName) {
 		if (fnName == "beforeRead") return;

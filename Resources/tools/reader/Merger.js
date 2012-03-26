@@ -19,6 +19,14 @@
 			var me = this.getMergeTarget();
 			var ot = _.extend({}, other.raw) || {};
 			
+			for(name in me.raw) {
+				Ti.API.info("Merge Source " + name + " " + me.raw[name]);
+			}
+			
+			for(name in ot) {
+				Ti.API.info("Merge Target " + name + " " + ot[name]);
+			}
+			
 			var deep = this.getDeepMergeProperties();
 			for(var i = 0;i < deep.length;i++) {
 				if (ot.hasOwnProperty(deep[i])) {
@@ -27,7 +35,9 @@
 				}
 			}
 			me.raw = _.extend({}, ot, me.raw);
-			
+			for(name in me.raw) {
+				Ti.API.info("Merge Result " + name + " " + me.raw[name]);
+			}
 			
 		}	
 		

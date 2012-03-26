@@ -27,7 +27,6 @@
 			
 			if(res.any) {
 				_.each(res.result, _.bind(function(current) {
-					Ti.API.info(current + " " + (current && current.nodeName));
 					
 					var Reader = this.getResolvedItemReader(current);
 					var resolvedData = null;
@@ -44,6 +43,23 @@
 				}, this));
 				
 				var result = this.validateManyGetSingle(this._resolvedReaders);
+				
+				try {
+					
+					var other  = result.context.data.get("ChildrenItemReaders");
+					var me = this.context.data.get("ChildrenItemReaders");
+
+					Ti.API.info('ChildrenItemReaders Length before after: ' + other.length + " " + me.length);					
+					
+					this.merge(result.context.data);
+					
+					me = this.context.data.get("ChildrenItemReaders");
+					Ti.API.info('ChildrenItemReaders Length before after: ' + other.length + " " + me.length);					
+					
+					
+				} catch(e) {};
+				
+				
 				this.merge(result.context.data);
 				
 			}

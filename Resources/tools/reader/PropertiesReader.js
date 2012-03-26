@@ -24,7 +24,20 @@
 		},
 		afterRead:function() {
 			this._super();
-			if (this.containerElement) this.containerElement.context.data.set("properties", this.context.data.get("properties"));
+			var props = this.context.data.get("properties");
+			for(name in props) {
+				Ti.API.info("propertyReader Source: " + name + " " + props[name]);
+			}
+			if (this.containerElement) {
+				props = this.containerElement.context.data.get("properties");
+				for(name in props) {
+					Ti.API.info("propertyReader Before Target: " + name + " " + props[name]);
+				}
+				this.containerElement.context.data.set("properties", this.context.data.get("properties"));
+				for(name in props) {
+					Ti.API.info("propertyReader Target: " + name + " " + props[name]);
+				}
+			}
 		},
 		getItemReaderType : function() {
 			return $.PropertyItemReader;
@@ -47,7 +60,7 @@
 				
 				if ((view = this.x.children("view").get().value())) {
 					
-					var reader = new UI.ViewReader({
+					var reader = new $.ViewReader({
 						context: c.context.createChild(),
 						xml: view
 					});
@@ -63,7 +76,6 @@
 		},
 		
 		afterBuild: function() {
-			this._super();
 			
 			var item = this.context.data.get("ViewInProperty");
 			if (item) {
@@ -73,9 +85,16 @@
 					var o = {};
 					o[item.propertyName] = instance.getView();
 					instance.setParent(this.containerElement);
-					this.containerElement.context.data.set("properties", o);
+					
+					var setter = "set" + item.propertyName.slice(0, 1).toUpperCase() + item.propertyName.slice(1);
+					this.containerElement.containerElement.context.getInstance(this.context.ptr).view[setter](instance.getView());
+					
+					//Ti.API.info("Setting PropertyName " + item.propertyName + " to " + instance.view);
+					//this.containerElement.context.data.set("properties", o);
+					//Ti.API.info("-- hasNewValue = " + this.containerElement.context.data.get("properties").window);
 				}, this);
 			}
+			
 		}
 		
 	});

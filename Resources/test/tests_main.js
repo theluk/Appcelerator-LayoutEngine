@@ -22,7 +22,7 @@
 			});
 			
 			var iId = base.context.createInstance();
-			var instance = base.context.getInstance(iId);
+			var instance = base.context.getInstance(iId).view;
 			
 			expect(instance instanceof Ti.UI.View).toBeTruthy();
 			

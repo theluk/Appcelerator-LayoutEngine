@@ -27,7 +27,7 @@
 			});
 			this.data.context = this;
 
-			this.id = _.uniqueId("_build_context");
+			this.id = _.uniqueId("_build_context_");
 			ctx[this.id] = {
 				context : this
 			};
@@ -37,11 +37,12 @@
 			var isProxy = (options && options.proxy);
 			if(isProxy)
 				delete options.proxy;
-
+			
 			var c = new $.Context(_.extend({}, this.options, {
 				data : null
 			}, options, {
-				parent : this
+				parent : this,
+				isProxy: isProxy
 			}));
 			isProxy ? (this.proxyChild = c) : this.childs.push(c);
 
@@ -50,10 +51,9 @@
 		addBuild : function(fn, instance) {
 			if(!this.__root)
 				this.__root = this.root();
-			if(!this.__buildchain)
+			if(!this.__buildchain && !(this.__buildchain = this.__root.__buildchain))
 				(this.__buildchain = this.__root.__buildchain = $.Context.createBuildChain(this));
-			this.__buildchain.add.call(this, fn, instance);
-			Ti.API.info("Adding Build : " + fn.toString());
+			this.__buildchain.add.call(this, fn, (instance || this.reader));
 		},
 		onBeforeChainRun : function(ptr) {
 			instances[ptr] = {};
@@ -68,7 +68,7 @@
 			var id = _.uniqueId("_build_instance_");
 			if(!this.__root)
 				this.__root = this.root();
-			if(!this.__buildchain)
+			if(!this.__buildchain && !(this.__buildchain = this.__root.__buildchain))
 				(this.__buildchain = this.__root.__buildchain = $.Context.createBuildChain(this));
 			
 			// Executes the Building-LifeCycle, letting controls set up a build
@@ -76,14 +76,19 @@
 				this.reader.execute();
 
 			// Runs the BuildChain which results in createing the UI instances etc.
-			Ti.API.info("Begin running BuildChain");
 			this.__buildchain.execute(id);
-			Ti.API.info("End running BuildChain");
 			return id;
 
 		},
 		getInstance : function(ptr) {
 			return instances[ptr][this.id];
+		},
+		removeInstance: function(ptr) {
+			if(instances[ptr]) {
+				delete instances[ptr];
+				return true;
+			}
+			return false;
 		},
 		_setInstanceInternal : function(ptr, instance) {
 			var ns = (instances[ptr] || (instances[ptr] = {}));
@@ -94,9 +99,6 @@
 				return this.parent.root();
 			return this;
 		},
-		createReader : function(xml) {
-			return null;
-		}
 	});
 
 	$.Context.get = function(id) {
@@ -110,18 +112,20 @@
 		var executor = function(ptr) {
 			var pointer = ptr;
 			context.onBeforeChainRun();
-			_.each(data, function(c) {
-				c(pointer);
-			});
+			var _data = data.slice();
+			var current;
+			while ((current = _data.shift())) {
+				current(ptr);
+			}
 			context.onAfterChainRun();
 		};
 		return {
 			add : function(fn, instance) {
 				var func = fn, instance = instance, context = this;
-
 				data.push(function(ptr) {
 					var tSetter = context.setInstance, tGetter = context.getInstance, tPtr = context.ptr, pointer = ptr;
-
+					
+					
 					context.setInstance = function(instance) {
 						$.Context.prototype._setInstanceInternal.call(context, pointer, instance);
 					};
@@ -129,11 +133,11 @@
 					context.ptr = pointer;
 
 					context.getInstance = function() {
-						return $.Context.prototype.getInstance.call(context, pointer);
+						var result = $.Context.prototype.getInstance.call(context, pointer);
+						return result;
 					};
-
 					func.apply(instance, [context].concat(_.toArray(arguments)));
-
+					
 					context.setInstance = tSetter;
 					context.getInstance = tGetter;
 					context.ptr = tPtr;

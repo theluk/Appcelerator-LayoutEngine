@@ -6,11 +6,10 @@ Logfile initialized
 [DEBUG] Waiting for device to be ready ...
 [TRACE] adb devices returned 1 devices/emulators
 [DEBUG] Device connected... (waited 0 seconds)
-[DEBUG] waited 0.015000 seconds on emulator to get ready
+[DEBUG] waited 0.016000 seconds on emulator to get ready
 [DEBUG] com.layoutEngine installed? True
 [INFO] Fastdev server running, deploying in Fastdev mode
 [INFO] Copying project resources..
-[TRACE] COPYING MODIFIED FILE: C:\Users\theluk\GIT\appcelerator\LayoutEngine\Resources\tools\reader\Context.js => C:\Users\theluk\GIT\appcelerator\LayoutEngine\build\android\bin\assets\Resources\tools\reader\Context.js
 [INFO] Tiapp.xml unchanged, skipping class generation
 [DEBUG] Processing Android resource drawables
 [DEBUG] found drawable-long-land-hdpi splash screen at C:\Users\theluk\GIT\appcelerator\LayoutEngine\Resources\android\images\res-long-land-hdpi\default.png
@@ -24,9 +23,35 @@ Logfile initialized
 [DEBUG] found drawable-notlong-port-ldpi splash screen at C:\Users\theluk\GIT\appcelerator\LayoutEngine\Resources\android\images\res-notlong-port-ldpi\default.png
 [DEBUG] found drawable-notlong-port-mdpi splash screen at C:\Users\theluk\GIT\appcelerator\LayoutEngine\Resources\android\images\res-notlong-port-mdpi\default.png
 [INFO] Waiting for SDCard to become available..
+[TRACE] Launch output: Starting: Intent { act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] cmp=com.layoutEngine/.LayoutengineActivity }
+Warning: Activity not started, its current task has been brought to the front
+
 [INFO] Re-launching application ... LayoutEngine
 [INFO] Launching application ... LayoutEngine
 [TRACE] Launch output: Starting: Intent { act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] cmp=com.layoutEngine/.LayoutengineActivity }
 
-[TRACE] Launch output: 
-[TRACE] Launch output: 
+[DEBUG] com.layoutEngine installed? True
+[INFO] Fastdev server running, deploying in Fastdev mode
+[INFO] Copying project resources..
+[INFO] Tiapp.xml unchanged, skipping class generation
+[DEBUG] Processing Android resource drawables
+[DEBUG] found drawable-long-land-hdpi splash screen at C:\Users\theluk\GIT\appcelerator\LayoutEngine\Resources\android\images\res-long-land-hdpi\default.png
+[DEBUG] found drawable-long-land-ldpi splash screen at C:\Users\theluk\GIT\appcelerator\LayoutEngine\Resources\android\images\res-long-land-ldpi\default.png
+[DEBUG] found drawable-long-port-hdpi splash screen at C:\Users\theluk\GIT\appcelerator\LayoutEngine\Resources\android\images\res-long-port-hdpi\default.png
+[DEBUG] found drawable-long-port-ldpi splash screen at C:\Users\theluk\GIT\appcelerator\LayoutEngine\Resources\android\images\res-long-port-ldpi\default.png
+[DEBUG] found drawable-notlong-land-hdpi splash screen at C:\Users\theluk\GIT\appcelerator\LayoutEngine\Resources\android\images\res-notlong-land-hdpi\default.png
+[DEBUG] found drawable-notlong-land-ldpi splash screen at C:\Users\theluk\GIT\appcelerator\LayoutEngine\Resources\android\images\res-notlong-land-ldpi\default.png
+[DEBUG] found drawable-notlong-land-mdpi splash screen at C:\Users\theluk\GIT\appcelerator\LayoutEngine\Resources\android\images\res-notlong-land-mdpi\default.png
+[DEBUG] found drawable-notlong-port-hdpi splash screen at C:\Users\theluk\GIT\appcelerator\LayoutEngine\Resources\android\images\res-notlong-port-hdpi\default.png
+[DEBUG] found drawable-notlong-port-ldpi splash screen at C:\Users\theluk\GIT\appcelerator\LayoutEngine\Resources\android\images\res-notlong-port-ldpi\default.png
+[DEBUG] found drawable-notlong-port-mdpi splash screen at C:\Users\theluk\GIT\appcelerator\LayoutEngine\Resources\android\images\res-notlong-port-mdpi\default.png
+[INFO] Waiting for SDCard to become available..
+[ERROR] Error checking for SDCard using 'mount'
+[INFO] Re-launching application ... LayoutEngine
+[ERROR] Exception occured while building Android project:
+[ERROR] Traceback (most recent call last):
+[ERROR]   File "C:\Users\theluk\AppData\Roaming\Titanium\mobilesdk\win32\1.8.2\android\builder.py", line 2083, in <module>
+[ERROR]     s.build_and_run(False, avd_id, debugger_host=debugger_host)
+[ERROR]   File "C:\Users\theluk\AppData\Roaming\Titanium\mobilesdk\win32\1.8.2\android\builder.py", line 1962, in build_and_run
+[ERROR]     for line in processes.splitlines():
+[ERROR] AttributeError: 'NoneType' object has no attribute 'splitlines'

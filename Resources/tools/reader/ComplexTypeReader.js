@@ -15,7 +15,8 @@
 		
 		getItemReader: function(xml) {
 			if (!xml || xml.nodeName == "#text") return null;
-			var ctor = this.getItemReaderType(xml) || $.Reader;
+			var ctor = this.getItemReaderType(xml);
+			if (!ctor) return; // throw "ComplexTypeReader.getItemReader : Ctor is undefined";
 			return new ctor(this.getItemReaderOptions(xml));
 		},
 		getItemReaderOptions : function(xml) {
@@ -37,34 +38,29 @@
 			var children = [];
 			
 			this.x.children().each(_.bind(function(el) {
-				Ti.API.info("ComplexTypeReader: Trying Read Child " + el.nodeName);
 				var reader = this.getItemReader(el);
 				if (reader) {
-					Ti.API.info("Child Element Read : " + el.nodeName);
 					children.push(reader);
 					reader.read();
-					Ti.API.info("Child Element Finish Read");
 				}
 			}, this));
-			this.context.data.set("ChildrenItemReaders", children);
-			
+			if (children.length > 0) this.context.data.set("ChildrenItemReaders", children);
 		},
-		appendInstance: function(child) {
+		appendInstance: function(childReader) {
+			// Is in build-life-cycle , should be called only through build-life-cycle
 			var instance = this.context.getInstance();
 			// instance.add(child);
 		},
 		onBuildChildren : function() {
-			
-			
 			var children = this.context.data.get("ChildrenItemReaders");
+			
 			if (children && children.length > 0) {
 				_.each(children, _.bind(function(child) {
+
 					child.build();
-						
+					if (!child._valid) return;
 					this.context.addBuild(function() {
-						var ptr = this.context.ptr;
-						var instance = child.context.getInstance(ptr);
-						this.appendChild(child);
+						this.appendInstance(child, this.context.ptr);
 					}, this);
 				
 				}, this));

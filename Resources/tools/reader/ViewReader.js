@@ -14,9 +14,11 @@
 			if(j - 1 == i) {
 				item = "create" + item;
 			}
+			var str = "";
+			_.times(i, function() {str+="-";});
 			current = current[item];
 		};
-		return current
+		return current;
 	};
 	
 	$.ViewReader = $.Reader.extend({
@@ -34,13 +36,14 @@
 			
 		},
 		getDeepMergeProperties: function() {
-			return ["properties", "children"];
+			return this._super().concat(["properties", "children"]);
 		},
 		onBuild : function() {
 			var d = this.context.data;
+			var self = this;
 			this.context.addBuild(function() {
 				var attributes = {
-					data:this.context.data
+					context:this.context
 				};
 				if (d.get("Type")) {
 					attributes.viewType = d.get("Type");
@@ -48,7 +51,6 @@
 				
 				var InstanceType = (d.get("Module") || UI.ViewWrapper);
 				var instance = new InstanceType(attributes);
-				
 				this.context.setInstance(instance);
 			});	
 			

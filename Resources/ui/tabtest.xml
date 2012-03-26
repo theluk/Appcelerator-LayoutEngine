@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<layout>
+	<abstract>
+		<children id="refChilds">
+			<view type="Ti.UI.View">
+				<children>
+					<view type="Ti.UI.Label">
+						<properties>
+							<text ref="refText" />
+						</properties>
+					</view>
+				</children>
+			</view>
+		</children>
+		<view id="refRow" type="Ti.UI.TableViewRow" properties="title:Das ist ein weiterer Test!;" />
+		<view id="refTbl" type="Ti.UI.TableView" properties="layout:vertical;">
+			<children appendMethod="appendRow">
+				<view id="row1" ref="refRow" />
+				<view id="row2" ref="refRow" />
+				<view id="row3" ref="refRow" />
+				<view id="row4" ref="refRow" />
+				<view id="row5" ref="refRow" />
+			</children>
+		</view>
+	</abstract>
+	<views>
+		<view id="main" type="Ti.UI.TabGroup">
+			<children appendMethod="addTab">
+				<view id="tab1" type="Ti.UI.Tab" properties="title:Tab 1;">
+					<properties>
+						<window>
+							<view id="tab1Window" type="Ti.UI.Window" properties="title:Willkommen;backgroundColor:red;">
+								<children ref="refChilds" />
+							</view>
+						</window>
+					</properties>
+				</view>
+				<view id="tab2" type="Ti.UI.Tab" properties="title:Tab 2;">
+					<properties>
+						<window>
+							<view id="tab2Window" type="Ti.UI.Window" properties="title:Willkommen;backgroundColor:blue;">
+								<children>
+									<view ref="refTbl" />
+								</children>
+							</view>
+						</window>
+					</properties>
+				</view>
+			</children>
+		</view>
+	</views>
+</layout>
