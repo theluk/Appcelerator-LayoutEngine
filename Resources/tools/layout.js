@@ -35,6 +35,7 @@
 	 */
 	
 	Ti.include("ui/ViewWrapper.js");
+	Ti.include("ui/App.js");
 	
 	module.exports.ui = UI;
 	

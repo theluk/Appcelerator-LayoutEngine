@@ -2,6 +2,16 @@
 
 //Ti.include("/test/tests.js");
 
+
+var Layout = require("tools/layout");
+
+var app = new Layout.ui.App({
+	source: "ui/test/layout.xml"
+});
+
+
+
+/*
 var Layout = require("tools/layout");
 var x = require("tools/functions").xml;
 var loader = require("tools/loader");
@@ -19,6 +29,11 @@ var ptr = reader.context.createInstance();
 var wrapper = reader.context.getInstance(ptr);
 
 wrapper.view.open();
+
+*/
+
+
+
 
 /*var xml = loader.read({
 	source : "ui/tabtestForSpeedTest.xml"
@@ -107,6 +122,11 @@ instance.view.open();
 var result = ((new Date).getTime() - d);
 Ti.API.info("--- Loadingtime " + (result));
 */
+
+
+
+
+
 
 /*var tabGroup = reader.context.getInstance(ptr);
 

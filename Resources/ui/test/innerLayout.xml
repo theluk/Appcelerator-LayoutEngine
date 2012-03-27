@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<layout>
+	<views>
+		<view id="inner" properties="backgroundColor:white;" type="Ti.UI.Window">
+			<children>
+				<view type="Ti.UI.Label" properties="text:Im just here...;" />
+			</children>
+		</view>
+	</views>
+</layout>

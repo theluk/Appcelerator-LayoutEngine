@@ -4,12 +4,38 @@
 	// https://github.com/pivotal/jasmine/wiki
 
 	Ti.include("../tools/layoutPropertiesMap.js");
-
+		
+	var _ = require("lib/underscore");
+		
 	describe("Reader", function() {
 		var reader = require("tools/layout").reader;
 		var x = require("tools/functions").xml;
 		var loader = require("tools/loader");
 		var xml = loader.read().xml;
+		
+		it("Event Binding 1", function() {
+			
+			var xml = loader.read({
+				source: "ui/layoutViewReader.xml"
+			}).xml;
+			
+			var base = new reader.ViewReader({
+				xml : x(xml).getAll("view").get("#win").value()
+			});
+			
+			base.read();
+			
+			var events = base.context.data.get("eventSettings");
+			expect(events).toEqual({
+				"click" : {
+					"open" : "#main" 
+				},
+				"change" : {	
+					"set" : "null"
+				} 
+			});
+			
+		});
 		
 		it("Build Chain", function() {
 			
@@ -43,8 +69,8 @@
 			expect(base.context.data.get("Type")).toBeDefined();
 			expect(base.context.data.get("properties")).toEqual({
 				backgroundColor:"red",
-				top:10,
-				bottom:20
+				top:"10",
+				bottom:"20"
 			});
 			
 			base = new reader.ViewReader({
@@ -54,8 +80,8 @@
 			
 			expect(base.context.data.get("properties")).toEqual({
 				backgroundColor:"red",
-				top:10,
-				bottom:20
+				top:"10",
+				bottom:"20"
 			});
 			
 			base = new reader.ViewReader({
@@ -64,7 +90,7 @@
 			base.read();
 			expect(base.context.data.get("properties")).toEqual({
 				backgroundColor:"white",
-				top:1
+				top:"1"
 			});
 			
 			base.build();
@@ -266,7 +292,7 @@
 			
 			base.execute();
 			
-			expect(base._creationStage.length).toEqual(11);
+			expect(base._creationStage.length).toEqual(12);
 			expect(base.xml).toBeDefined();
 			expect(base.context).toBeDefined();
 			expect(base.context.data.get("nodeName")).toEqual("view");
@@ -384,7 +410,7 @@
 			expect(content).toEqual({
 				backgroundColor:"red",
 				title:"Hallo wie gehts dir",
-				top:34
+				top:"34 px"
 			});	
 			
 			content = x(null).parseInlineProperties().destroy();

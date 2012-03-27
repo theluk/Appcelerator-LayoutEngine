@@ -49,12 +49,10 @@
 					var other  = result.context.data.get("ChildrenItemReaders");
 					var me = this.context.data.get("ChildrenItemReaders");
 
-					Ti.API.info('ChildrenItemReaders Length before after: ' + other.length + " " + me.length);					
 					
 					this.merge(result.context.data);
 					
 					me = this.context.data.get("ChildrenItemReaders");
-					Ti.API.info('ChildrenItemReaders Length before after: ' + other.length + " " + me.length);					
 					
 					
 				} catch(e) {};

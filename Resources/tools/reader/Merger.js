@@ -19,7 +19,6 @@
 			var me = this.getMergeTarget();
 			var ot = _.extend({}, other.raw) || {};
 			
-			
 			var deep = this.getDeepMergeProperties();
 			for(var i = 0;i < deep.length;i++) {
 				if (ot.hasOwnProperty(deep[i])) {
@@ -27,6 +26,7 @@
 					delete ot[deep[i]];
 				}
 			}
+			
 			me.raw = _.extend({}, ot, me.raw);
 			
 		}	

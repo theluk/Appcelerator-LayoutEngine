@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<layout>
+	<abstract>
+		<view id="list" type="Ti.UI.TableView">
+			<children appendMethod="appendRow">
+				<view type="Ti.UI.TableViewRow" properties="title:Jasmine Tests;" onClick="open:#jasmine;loading:#loading;" />
+			</children>
+		</view>
+		<view id="detail" type="Ti.UI.View">
+			<children>
+				<view type="Ti.UI.Label" properties="text:Hi Im just sitting here for now...;" />
+			</children>
+		</view>
+	</abstract>
+	<views>
+		<view id="main" type="Ti.UI.Window" properties="backgroundColor:white;exitOnClose:true;color:black;">
+			<children>
+				<view properties="top:0;right:0;left:0;height:20%;layout:vertical;">
+					<children>
+						<view type="Ti.UI.Label" properties="text:Welcome to the TestApp.;font:24 bold;" />
+						<view type="Ti.UI.Label">
+							<properties>
+								<top>10dp</top>
+								<text>Choose items in the navigation...</text>
+							</properties>
+						</view>
+					</children>
+				</view>
+				<view properties="top:20%;right:0;left:0;bottom:0;" type="Ti.UI.View">
+					<children>
+						<view ref="list" />
+					</children>
+				</view>
+				<view id="loading" properties="top:0;left:0;right:0;bottom:0;backgroundColor:white;opacity:.1;visible:false;">
+					<children>
+						<view properties="left:0;right:0;height:100;backgroundColor:#d8d8d8;">
+							<children>
+								<view type="Ti.UI.Label" properties="color:#2c2c2c;text:Loading...;" />
+							</children>
+						</view>
+					</children>
+				</view>
+			</children>
+		</view>
+		
+		
+		
+		<view id="jasmine" ref="jasminewindow" src="ui/test/jasmine-tests.xml" />
+		
+		
+	</views>
+</layout>

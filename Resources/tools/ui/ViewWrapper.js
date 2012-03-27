@@ -4,11 +4,41 @@
 
 (function() {
 
+	var createEvent = function(name, settings) {
+		if (!this.view || !UI.App) return;
+		var fn = null;
+		var loading = settings.hasOwnProperty("loading") ? settings.loading : null;
+		
+		if (settings.hasOwnProperty("open")) {
+			fn = _.bind(function(data) {
+				if (UI.currentApp) {
+					var loadWrapper = null;
+					if (loading) {
+						loadWrapper = UI.currentApp.find(function(wrapper) {
+							var result = wrapper.context.data.get("id") == loading.slice(1);
+							return result;
+						});
+					}
+					if (loadWrapper) loadWrapper.view.setVisible(true);
+					UI.currentApp.openWindow(settings.open, data);
+					if (loadWrapper) loadWrapper.view.setVisible(false);
+				}	
+			}, this);
+		}
+		
+		if (!fn) return;
+		this.on(name, fn);
+		return fn;
+	};
+
 	UI.ViewWrapper = Class.extend({
 
 		init : function(options) {
 			this.options = options || {};
 			this.context = this.options.context;
+			this._delegatedEvents = {};
+			this._delegatedEventsSettings = null;
+			
 			if(!this.context)
 				throw "UI.ViewWrapper needs 'Context' in init";
 
@@ -27,6 +57,40 @@
 
 			if(!this.view)
 				throw "Could not create ViewWrapper, view is null...";
+		},
+		delegateEvents: function(obj) {
+			this.undelegateEvents();
+			this._delegatedEventsSettings = obj, self = this;
+			for(name in obj) {
+			 	self._delegatedEvents[name] = createEvent.call(self, name, obj[name]);
+			}
+		},
+		find: function(fn) {
+			if (fn(this)) {
+				return this;
+			} else {
+				var value = null;
+				for(var i=0;i < this.children.length;i++) {
+					value = this.children[i].find(fn);
+					if (value) break;		
+				}
+				return value;
+			}
+		},
+		undelegateEvents : function() {
+			var obj = this._delegatedEventsSettings, self = this;
+			if (obj) {
+				for(name in obj) {
+					self.off(name, self._delegatedEvents[name]);
+				}
+			}
+			this._delegatedEventsSettings = null;
+		},
+		on: function(name, fn) {
+			this.view.addEventListener(name, fn);
+		},
+		off : function(name, fn) {
+			this.view.removeEventListener(name, fn);
 		},
 		getView : function() {
 			return this.view;
@@ -67,7 +131,19 @@
 			this.children.splice(_.indexOf(this.children, match), 1);
 			this.view[method || "remove"](match.view);
 		},
-		setParent: function() {}
+		setParent: function() {},
+		destroy: function() {
+			this.undelegateEvents();
+			this.context = null;
+			this.view = null;
+			_.each(this.children, function(child){
+				child.destroy();
+			});
+			this.children = null;
+			this.options = null;
+			this.ptr = null;
+			
+		}
 		
 	});
 

@@ -26,9 +26,14 @@
 				</view>
 				<view needs="maxHeight:480;" properties="top:0;right:0;left:0;bottom:0;" type="Ti.UI.View">
 					<children>
-						<view ref="list" />
+						<view ref="list" onClick="open:#detailWindow;" />
 					</children>
 				</view>
+			</children>
+		</view>
+		<view id="detailWindow" type="Ti.UI.Window" properties="backgroundColor:white;">
+			<children>
+				<view ref="detail" properties="top:0;bottom:0;left:0;right:0;" />
 			</children>
 		</view>
 	</views>

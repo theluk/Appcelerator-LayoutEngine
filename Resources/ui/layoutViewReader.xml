@@ -19,7 +19,7 @@
 			</properties>
 		</view>
 		<view id="test3" ref="refView" properties="top:1;" />
-		<view id="win" type="Ti.UI.Window" properties="backgroundColor:red;fullscreen:true;">
+		<view id="win" type="Ti.UI.Window" onClick="open:#main;" onChange="set:null;" properties="backgroundColor:red;fullscreen:true;">
 			<children>
 				<view type="Ti.UI.Label" properties="text:Fuck Android!!!;" needs="plattform:iphone;">
 					<properties ref="propRef" />

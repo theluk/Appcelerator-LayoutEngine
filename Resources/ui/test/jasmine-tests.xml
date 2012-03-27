@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<layout>
+	<views>
+		<view id="jasminewindow" type="Ti.UI.Window" properties="backgroundColor:white;fullscreen:false;">
+			<children>
+				<view id="jasmineWebView" type="Ti.UI.WebView" module="ui/tiJasmin" properties="html:;" />
+			</children>
+		</view>
+	</views>
+</layout>

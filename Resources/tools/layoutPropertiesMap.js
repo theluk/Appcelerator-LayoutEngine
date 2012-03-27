@@ -1,11 +1,10 @@
-var map = {};
-(function() {
+var map = {}; (function() {
 
 	var fnString = function(value) {
 		return value.toString()
 	};
 	var fnInt = function(value) {
-		return parseInt(value)
+		return parseFloat(value)
 	};
 	var fnBool = function(value) {
 		return value == "true"
@@ -34,11 +33,10 @@ var map = {};
 		};
 		return result;
 	}
-	
 	//////////////////////////////////////////////////////////////////////////////////////////
 	// PASTE CODE BELOW ...																	//
 	//////////////////////////////////////////////////////////////////////////////////////////
-	
+
 	map["activity"] = fnString;
 	map["anchorPoint"] = fnPoint;
 	map["animatedCenterPoint"] = fnPoint;
@@ -66,7 +64,7 @@ var map = {};
 	map["borderColor"] = fnString;
 	map["borderRadius"] = fnInt;
 	map["borderWidth"] = fnInt;
-	map["bottom"] = fnInt;
+	map["bottom"] = fnString;
 	map["center"] = fnPoint;
 	map["children"] = fnString;
 	map["color"] = fnString;
@@ -75,12 +73,12 @@ var map = {};
 	map["focusable"] = fnBool;
 	map["font"] = fnFont;
 	map["fullscreen"] = fnBool;
-	map["height"] = fnInt;
+	map["height"] = fnString;
 	map["highlightedColor"] = fnString;
 	map["html"] = fnString;
 	map["keepScreenOn"] = fnBool;
 	map["layout"] = fnString;
-	map["left"] = fnInt;
+	map["left"] = fnString;
 	map["leftNavButton"] = fnString;
 	map["minimumFontSize"] = fnInt;
 	map["modal"] = fnBool;
@@ -88,7 +86,7 @@ var map = {};
 	map["opacity"] = fnInt;
 	map["orientation"] = fnInt;
 	map["orientationModes"] = fnString;
-	map["right"] = fnInt;
+	map["right"] = fnString;
 	map["rightNavButton"] = fnString;
 	map["shadowColor"] = fnString;
 	map["shadowOffset"] = fnString;
@@ -105,13 +103,13 @@ var map = {};
 	map["titlePrompt"] = fnString;
 	map["titlepromptid"] = fnString;
 	map["toolbar"] = fnString;
-	map["top"] = fnInt;
+	map["top"] = fnString;
 	map["touchEnabled"] = fnBool;
 	map["transform"] = fnString;
 	map["translucent"] = fnBool;
 	map["url"] = fnString;
 	map["visible"] = fnBool;
-	map["width"] = fnInt;
+	map["width"] = fnString;
 	map["windowPixelFormat"] = fnInt;
 	map["windowSoftInputMode"] = fnInt;
 	map["wordWrap"] = fnBool;

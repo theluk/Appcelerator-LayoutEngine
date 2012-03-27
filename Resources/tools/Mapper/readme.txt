@@ -22,7 +22,7 @@ $("tr:has(td.type)", $("#properties ~ table")).map(function() {
 var retValue = "map[\"" + $(".name", this).text() + "\"] = ";
 switch ($(".type", this).text()) {
    case "String" : retValue+="fnString;";break;
-   case "Number or String" : retValue+="fnInt;";break;
+   case "Number or String" : retValue+="fnString;";break;
    case "Font" : retValue+="fnFont;";break;
    case "Number":retValue+="fnInt;";break;
    case "Boolean":retValue+="fnBool;";break;
