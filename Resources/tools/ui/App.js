@@ -5,6 +5,7 @@
 UI.currentApp = null;
 
 AppInstances = [];
+AppInstancesByID = {};
 
 UI.App = Class.extend({
 	
@@ -42,6 +43,12 @@ UI.App = Class.extend({
 	},
 	openWindow: function(id) {
 		
+		if (AppInstancesByID[id]) {
+			var cache = AppInstancesByID[id];
+			cache.wrapper.view.open();
+			return;
+		}
+		
 		this.releaseCurrent();
 		
 		var reader = new $.ViewReader({xml : this.mainViews.get(id).value()});
@@ -49,13 +56,16 @@ UI.App = Class.extend({
 		var ptr = reader.context.createInstance();
 		var currentInstance = reader.context.getInstance(ptr);
 		
-		AppInstances.push({
+		var instRef = {
 			reader: reader,
-			ptr : ptr
-		});
+			ptr : ptr,
+			wrapper : currentInstance
+		};
+		AppInstances.push(instRef);
+		AppInstancesByID[id] = instRef;
 		
 		currentInstance.view.open();
-		currentInstance.on("close", this.releaseCurrent);
+		//currentInstance.on("close", this.releaseCurrent);
 		
 	},
 	
@@ -63,6 +73,7 @@ UI.App = Class.extend({
 		if(AppInstances.length < 2) return;
 		
 		var current = AppInstances.pop();
+		delete AppInstancesByID[current.reader.context.get("id")];
 		
 		if (current.ptr) {
 						

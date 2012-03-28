@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <layout>
 	<views>
-		<view id="main" type="Ti.UI.Window" properties="layout:vertical;backgroundColor:white;fullscreen:true;title:Test;exitOnClose;">
+		<view id="main" type="Ti.UI.View">
 			<children>
+				<view type="Ti.UI.Label" properties="visible:<%=loading%>;text:Loading...!;" />
 				<view type="Ti.UI.Label" properties="color:black;text:Native <%=native%>;" />
 				<view type="Ti.UI.Label" properties="color:black;text:Xml <%=xml%>;" />
 			</children>

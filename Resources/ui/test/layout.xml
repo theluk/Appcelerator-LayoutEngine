@@ -4,6 +4,7 @@
 		<view id="list" type="Ti.UI.TableView">
 			<children appendMethod="appendRow">
 				<view type="Ti.UI.TableViewRow" properties="title:Jasmine Tests;" onClick="open:#jasmine;loading:#loading;" />
+				<view type="Ti.UI.TableViewRow" properties="title:Speed Test;" onClick="open:#speedtest;loading:#loading;" />
 			</children>
 		</view>
 		<view id="detail" type="Ti.UI.View">
@@ -47,6 +48,7 @@
 		
 		<view id="jasmine" ref="jasminewindow" src="ui/test/jasmine-tests.xml" />
 		
+		<view id="speedtest" ref="speedtest_win" src="ui/test/speedtest.xml" />
 		
 	</views>
 </layout>
