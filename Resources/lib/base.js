@@ -23,26 +23,43 @@
 		var prototype = new this();
 		initializing = false;
 
-		// Copy the properties over onto the new prototype
-		for(var name in prop) {
-			// Check if we're overwriting an existing function
-			prototype[name] = typeof prop[name] == "function" && typeof _super[name] == "function" && fnTest.test(prop[name]) ? (function(name, fn) {
-				return function() {
-					var tmp = this._super, self = this, args = arguments;
+		var fnOverride = function(name, fn, setterFn, getterFn) {
+			return function() {
+				var tmp = this._super, self = this, args = arguments;
 
-					// Add a new ._super() method that is the same method
-					// but on the super-class
-					this._super = function() {
+				// Add a new ._super() method that is the same method
+				// but on the super-class
+				this._super = function() {
+					if (setterFn || getterFn) {
+						return setterFn ? setterFn.apply(self, (arguments.length > 0 ? arguments : args)) : getterFn.apply(self, (arguments.length > 0 ? arguments : args));
+					} else {
 						return _super[name] && _super[name].apply(self, (arguments.length > 0 ? arguments : args));
 					}
-					// The method only need to be bound temporarily, so we
-					// remove it when we're done executing
-					var ret = fn.apply(this, arguments);
-					this._super = tmp;
+				}
+				// The method only need to be bound temporarily, so we
+				// remove it when we're done executing
+				var ret = fn.apply(this, arguments);
+				this._super = tmp;
 
-					return ret;
-				};
-			})(name, prop[name]) : prop[name];
+				return ret;
+			}
+		}
+
+		// Copy the properties over onto the new prototype
+		for(var name in prop) {
+			
+			var g = _super.__lookupGetter__(name), s = _super.__lookupSetter__(name), og = prop.__lookupGetter__(name), os = prop.__lookupSetter__(name);
+			if ((g && og)|| (s && os)) {
+				if ( g )
+                	prototype.__defineGetter__(name, fnTest.test(og) ? fnOverride.call(this, name, og, null, g) : og);
+	            if ( s )
+	                prototype.__defineSetter__(name, fnTest.test(os) ? fnOverride.call(this, name, os, s, null) : os);
+			} else if (typeof prop[name] == "function" && typeof _super[name] == "function" && fnTest.test(prop[name])) {
+				prototype[name] = fnOverride.call(this, name, prop[name], null, null);
+			} else {
+				prototype[name] = prop[name];
+			}
+			
 		}
 
 		// The dummy class constructor
