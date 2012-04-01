@@ -238,7 +238,6 @@
 		delete this._last;
 		delete this._lastArgs;
 		delete this.wrapper;
-		delete this;
 		return value;
 	};
 

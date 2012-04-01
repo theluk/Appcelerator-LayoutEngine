@@ -6,10 +6,13 @@
 	var Layout = require("tools/layout");
 	var loader = require("tools/loader");
 	var x = require("tools/functions").xml;
-	
+	var _ = require("lib/underscore");
+
 	var Wrapper = Layout.ui.ViewWrapper.extend({
 
 		init : function() {
+
+			this._super();
 
 			this.testXml = loader.read({
 				source : "ui/tabtestForSpeedTest.xml"
@@ -19,45 +22,57 @@
 				xml : x(this.testXml).getAll("view").get("#main").value()
 			});
 
-			
-
 			this.testResultWrapper = null;
 
 			this.resultXml = loader.read({
 				source : "ui/SpeedTest.xml"
 			});
-			this.updateView({
-				loading:true
+			
+		},
+		loaded : function() {
+
+			this.childWrapper = this.find(function(wrapper) {
+				return wrapper.context.data.get("id") == "test_wrapper";
 			});
 			
-			var self = this;
-			self.execute();
+			this.execute();
 			
 		},
 		execute : function() {
-			var result = {
-				"xml" : this.runner(this.runXml),
-				"native" : this.runner(this.runNative),
-				"loading" : false
-			};
-			this.updateView(result);
-		},
-		updateView: function(data) {
-			if(this.testResultWrapper)
-				this.childWrapper.remove(this.testResultWrapper);
 
-			var template = this.resultXml.content;
+			this.updateView({
+				loading : true
+			});
+			var self = this;
+			setTimeout(function() {
+				var result = {
+					"xml" : self.runner(self.runXml),
+					"native" : self.runner(self.runNative),
+					"loading" : false
+				};
+				self.updateView(result);
+			}, 1000);
+		},
+		updateView : function(data) {
+			if(this.testResultWrapper){
+				this.testResultWrapper.context.remove(this.testResultWrapper.ptr);
+			}
+			var template = this.resultXml.template;
+
+			Ti.API.info('Template' + template.toString());
+
 			var rXml = loader.read({
-				content:template,
-				data:data
-			}).xml;
+				template : template,
+				data : data
+			});
+
 			var r = new Layout.reader.ViewReader({
-				xml : x(rXml).getAll("view").get("#main").value()
+				xml : x(rXml.xml).getAll("view").get("#main").value()
 			});
 			var ptr = r.context.createInstance();
 			var instance = r.context.getInstance(ptr);
 			//instance.view.open();
-			
+
 			this.testResultWrapper = instance;
 			this.childWrapper.add(this.testResultWrapper);
 		},
@@ -124,6 +139,5 @@
 	});
 
 	module.exports = Wrapper;
-	
-})();
 
+})();

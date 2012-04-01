@@ -1,11 +1,21 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <layout>
 	<views>
-		<view id="main" type="Ti.UI.View">
+		<view id="main" type="Ti.UI.View" properties="layout:vertical;">
 			<children>
-				<view type="Ti.UI.Label" properties="visible:<%=loading%>;text:Loading...!;" />
-				<view type="Ti.UI.Label" properties="color:black;text:Native <%=native%>;" />
-				<view type="Ti.UI.Label" properties="color:black;text:Xml <%=xml%>;" />
+				
+				<% if (typeof(loading) != 'undefined' && loading == true) { %>
+					<view type="Ti.UI.Label" properties="top:10dp;color:black;text:Loading...!;" />
+				<% } %>
+				
+				<% if (typeof(native) != 'undefined') { %>
+					<view type="Ti.UI.Label" properties="top:10dp;color:black;text:Native <%=native%>;" />
+				<% } %>
+				
+				<% if (typeof(xml) != 'undefined') { %>
+					<view type="Ti.UI.Label" properties="top:10dp;color:black;text:Xml <%=xml%>;" />
+				<% } %>
+				
 			</children>
 		</view>
 	</views>

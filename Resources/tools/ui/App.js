@@ -65,21 +65,23 @@ UI.App = Class.extend({
 		AppInstancesByID[id] = instRef;
 		
 		currentInstance.view.open();
-		//currentInstance.on("close", this.releaseCurrent);
 		
 	},
 	
-	releaseCurrent: function(destroyInstance) {
-		if(AppInstances.length < 2) return;
+	releaseCurrent: function() {
+		if(AppInstances.length <= 1) return;
+		Ti.API.info('Releasing Window Reference');
 		
 		var current = AppInstances.pop();
-		delete AppInstancesByID[current.reader.context.get("id")];
+		delete AppInstancesByID[current.reader.context.data.get("id")];
 		
 		if (current.ptr) {
 						
 			current.reader.context.removeInstance(current.ptr);
 			
 		}
+		current = null;
+		
 	}
 	
 });

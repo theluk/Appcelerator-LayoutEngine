@@ -7,6 +7,15 @@
 	
 	$ = {};
 	UI = {};
+	Data = {};
+	
+	/**
+	 * Data Types
+	 */
+	Ti.include("data/events.js");
+	Ti.include("data/model.js");
+	
+	module.exports.data = Data;
 	
 	/**
 	 * Base Types...

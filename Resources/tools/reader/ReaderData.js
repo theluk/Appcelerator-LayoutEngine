@@ -20,6 +20,9 @@
 			}
 			this.raw[name] = value || previous;
 		},
+		match: function(name, value, proxy) {
+			return (this.get(name) == value || (proxy == true && this.context.proxyChild && this.context.proxyChild.data.match(name, value, proxy)));
+		},
 		get: function(name) {
 			return this.raw[name];
 		},

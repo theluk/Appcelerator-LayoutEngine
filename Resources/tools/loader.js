@@ -23,7 +23,7 @@ var read = function(options) {
 	var o = _.extend({}, defaults, options),
 		ret = {};
 
-	if(o.source && !o.content) {
+	if(o.source && !o.content && !o.template) {
 		var file = Ti.Filesystem.getFile(Ti.Filesystem.resourcesDirectory, o.source), blob = file.read();
 		o.content = blob.text;
 		blob = null;
@@ -31,8 +31,15 @@ var read = function(options) {
 	}
 	
 	ret.template = (o.template || _.template(o.content));
-	ret.content = o.content = ret.template(o.data);
-	ret.xml = Ti.XML.parseString(o.content);
+	
+	try
+	{
+		ret.content = o.content = ret.template(o.data);
+	} catch(e) {
+		Ti.API.info("Loader.js Error: " + e);
+	}
+	
+	ret.xml = o.content ? Ti.XML.parseString(o.content) : null;
 	o = null;
 	
 	return ret;

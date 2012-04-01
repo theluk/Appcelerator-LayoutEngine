@@ -3,7 +3,13 @@
 	<views>
 		<view id="speedtest_win" type="Ti.UI.Window" module="ui/SpeedTest" properties="backgroundColor:white;fullscreen:false;layout:vertical;">
 			<children>
-				<view id="test_wrapper" type="Ti.UI.View" properties="height:100%;width:100%;" />
+				<view id="toolbar" properties="height:120dp;">
+					<children>
+						<view id="refreshBtn" type="Ti.UI.Button" onClick="up:#speedtest_win;method:execute;" 
+							properties="title:Refresh;" />
+					</children>
+				</view>
+				<view id="test_wrapper" />
 			</children>
 		</view>
 	</views>

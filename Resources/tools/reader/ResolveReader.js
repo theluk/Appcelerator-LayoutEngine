@@ -43,21 +43,7 @@
 				}, this));
 				
 				var result = this.validateManyGetSingle(this._resolvedReaders);
-				
-				try {
-					
-					var other  = result.context.data.get("ChildrenItemReaders");
-					var me = this.context.data.get("ChildrenItemReaders");
-
-					
-					this.merge(result.context.data);
-					
-					me = this.context.data.get("ChildrenItemReaders");
-					
-					
-				} catch(e) {};
-				
-				
+						
 				this.merge(result.context.data);
 				
 			}

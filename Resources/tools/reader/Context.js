@@ -48,6 +48,14 @@
 
 			return c;
 		},
+		removeChild: function(child) {
+			var index = -1;
+			if (this.proxyChild === child) {
+				this.proxyChild = null;
+			} else if ((index = _.indexOf(this.childs, child)) > -1) {
+				this.childs.splice(index, 1);
+			}
+		},
 		addBuild : function(fn, instance) {
 			this.prepareBuild();
 			this.__buildchain.add.call(this, fn, (instance || this.reader));
@@ -95,6 +103,30 @@
 				return true;
 			}
 			return false;
+		},
+		remove: function(ptr) {
+			Ti.API.info('Removing Context... ' + this.id + " ptr: " + ptr);
+			
+			if (ptr) {
+				var wrapper = this.getInstance(ptr);
+				if (wrapper) {
+					wrapper.destroy();
+					wrapper = null;
+					delete instances[ptr][this.id];
+				}
+			}
+			delete ctx[this.id];
+			if (this.parent) this.parent.removeChild(this);
+			_.each(this.childs, function(child) {
+				child.remove(ptr);
+			});
+			
+			if (this === this.root()) {
+				if (this.__buildchain) {
+					this.__buildchain.destroy();
+					this.__buildchain = null;
+				} 
+			}
 		},
 		_setInstanceInternal : function(ptr, instance) {
 			var ns = (instances[ptr] || (instances[ptr] = {}));

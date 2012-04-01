@@ -6,6 +6,223 @@
 	Ti.include("../tools/layoutPropertiesMap.js");
 		
 	var _ = require("lib/underscore");
+	var Class = require("lib/base");
+	
+	describe("Array Extension", function() {
+		
+		it("should work", function() {
+			Array.extend = Class.extend;
+			var Data = require("tools/layout").data;
+			
+			var MyArray = Array.extend(Data.Events, {
+				init: function() {
+					this.splice.apply(this, [0, this.length].concat(_.toArray(arguments)));
+				},
+				add : function() {
+					this.push.apply(this, arguments);
+				},
+				toString : function() {
+					return this.join(",");
+				},
+				toArray : function() {
+					return this.slice();
+				},
+				push : function() {
+					var newLength = this._super();
+					this.trigger("length", {length:newLength});
+				}
+			});
+			
+			var myArray = new MyArray("test1", "test2");
+			
+			myArray.add("test3");
+			var newLength = 0;
+			myArray.on("length", function(data) {
+				newLength = data.length;
+			})
+			
+			expect(myArray.toArray()).toEqual(new Array("test1", "test2", "test3"));
+			
+			myArray.add("test4");
+			expect(newLength).toEqual(4);
+			
+			
+		});
+		
+	});
+	
+	describe("Data Model", function() {
+		
+		var data = require("tools/layout").data;
+		
+		it("should work", function() {
+			
+			var Item = data.Model.extend(data.Model.createProperties("test value"));
+			var item = new Item();
+			expect(item._propertyNames).toEqual(["test", "value"]);
+			
+			var called = false;
+			var fnChange = function(data) {
+				called = data;
+			};
+			item.on("change", fnChange);
+		
+			expect(called).toBeFalsy();
+			
+			item.test = "depp";
+			
+			expect(called).toEqual({
+				source: item,
+				eventName: "change",
+				oldValue : undefined,
+				newValue : "depp"
+			});
+			Ti.API.info('BEFORE CALLING item.json');
+			expect(item.json).toEqual({
+				test : "depp",
+				value : undefined
+			});
+			
+			
+			called = false;
+			item.off("change", fnChange);
+			item.test = "depp2";
+			
+			expect(called).toBeFalsy();
+			
+			item.on("change", fnChange);
+			item.test="depp";
+			expect(called).toEqual({
+				source: item,
+				eventName: "change",
+				oldValue : "depp2",
+				newValue : "depp"
+			});
+			called = false;
+			item.off("all");
+			item.test="depp43";
+			expect(called).toBeFalsy();
+			
+			
+		});
+		
+	});
+	
+	describe("Javaascript Getters and Setters", function() {
+		
+		it("should work", function() {
+			
+			var Person = Class.extend({
+			    init: function(options) {
+			        this.firstName = options.firstName;
+			        this.lastName = options.lastName;
+			    },
+			    get fullname() {
+			        return this.firstName + " " + this.lastName;
+			    },
+			    get message() {
+			        return "Person: " + this.fullname;
+			    }
+			});
+			
+			var Employee = Person.extend({
+			    init: function(options) {
+			        this._super();
+			        this.department = options.department;
+			    },
+			    get message() {
+			        return this._super() + " Department: " + this.department;
+			    }
+			});
+			
+			var person = new Person({
+			    firstName : "Mike",
+			    lastName : "Miller"
+			});
+			
+			expect(person.message).toEqual("Person: Mike Miller");
+			
+			var employee = new Employee({
+			    firstName : "Mike",
+			    lastName: "Miller",
+			    department: "Sales"
+			});
+			
+			expect(employee.message).toEqual("Person: Mike Miller Department: Sales");
+			expect(employee["message"]).toEqual("Person: Mike Miller Department: Sales");
+			
+			
+		});
+		
+		it("Should extend properly", function() {
+			
+			var O = Class.extend({
+				init: function() {
+					Ti.API.info('TEST: O calling init');
+					this.value = "hallo";
+				},
+				get value() {
+					return this._value + "!";
+				},
+				set value(val) {
+					this._value = val;
+				}
+			});
+			
+			var o = new O;
+			expect(o.value).toEqual("hallo!");
+			
+			var O2 = O.extend({
+				get value() {
+					return this._super() + " 2";
+				}
+			});
+			
+			var o2 = new O2;
+			expect(o2.value).toEqual("hallo! 2");
+			
+			O2.override("value", {get: function() {return this._super() + "!!!"}});
+			
+			o2 = new O2;
+			expect(o2.value).toEqual("hallo! 2!!!");
+			
+			
+		})
+		
+		it("Should work", function() {
+			
+			var O = function() {
+				this._value = "hallo";
+				this.value2 = "null";
+			};
+			
+			O.prototype = {
+				get value() {
+					return this._value;
+				},
+				set value(val) {
+					this._value = val + " via setter...";
+				}
+			};
+			
+			var o = new O;
+			expect(o.value).toEqual("hallo");
+			o.value = "Hi"
+			expect(o.value).toEqual("Hi via setter...");
+			
+			var O2 = function() {}
+			var g = O.prototype.__lookupGetter__("value"), s = O.prototype.__lookupSetter__("value");
+			var g2 = O.prototype.__lookupGetter__("value2"), s2 = O.prototype.__lookupSetter__("value2");
+			
+			expect(g).toBeDefined();
+			expect(s).toBeDefined();
+			
+			expect(g2).toBeUndefined();
+			expect(s2).toBeUndefined();
+			
+		});
+		
+	});
 		
 	describe("Reader", function() {
 		var reader = require("tools/layout").reader;
@@ -509,21 +726,7 @@
 
 	describe("Base.js", function() {
 
-		it("should have created a Class Object with multiple props", function() {
-			var Class = require("lib/base");
-			var MyClass = Class.extend({
-				test : 1
-			}, {
-				test2 : 2,
-				testFn: function() {
-					return this.test;
-				}
-			});
-			var myClass = new MyClass();
-			expect(myClass.test).toEqual(1);
-			expect(myClass.test2).toEqual(2);
-			expect(myClass.testFn()).toEqual(1);
-		});
+		
 	});
 	
 	describe("PropertiesMaper", function() {
